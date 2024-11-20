@@ -1,0 +1,13 @@
+#!/bin/bash
+
+rm /sys/fs/bpf/ebpf_backdoor_rwx
+
+mkdir -p ./cmake-build-debug && \
+  cmake -B ./cmake-build-debug && \
+  cmake --build ./cmake-build-debug && \
+  bpftool prog load cmake-build-debug/backdoor_rwx.c.o /sys/fs/bpf/ebpf_backdoor_rwx && \
+  ./cmake-build-debug/loader_rwx
+
+rm /sys/fs/bpf/ebpf_backdoor_rwx
+
+# bpftool prog run pinned /sys/fs/bpf/ebpf_backdoor_rwx repeat 0
